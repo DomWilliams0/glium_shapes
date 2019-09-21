@@ -1,7 +1,3 @@
-extern crate cgmath;
-#[macro_use]
-extern crate glium;
-extern crate glium_shapes;
 mod common;
 use glium::Surface;
 

@@ -1,7 +1,4 @@
 //! A module containing the error structures for this crate.
-extern crate glium;
-extern crate core;
-extern crate std;
 
 use std::error::Error;
 
@@ -29,7 +26,7 @@ impl std::error::Error for ShapeCreationError {
         }
     }
 
-    fn cause(&self) -> Option<&Error> {
+    fn cause(&self) -> Option<&dyn Error> {
         match self {
             &ShapeCreationError::VertexBufferCreationError(ref error) => Some(error),
             _ => None,
@@ -44,7 +41,7 @@ impl From<glium::vertex::BufferCreationError> for ShapeCreationError {
 }
 
 impl core::fmt::Display for ShapeCreationError {
-    fn fmt(&self, fmt: &mut core::fmt::Formatter) -> core::fmt::Result {
+    fn fmt(&self, fmt: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(fmt, "{}", self.description())
     }
 }

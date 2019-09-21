@@ -1,24 +1,15 @@
 //! A module for constructing axes locator shapes.
 
-extern crate cgmath;
-extern crate glium;
+use cgmath::*;
+use crate::vertex::Vertex;
 
-use errors::ShapeCreationError;
-use self::cgmath::*;
-use vertex::Vertex;
+use crate::errors::ShapeCreationError;
 
 /// A set of orthogonal `Axes` lines.
 ///
 /// This object is constructed using a `AxesBuilder` object.
 pub struct Axes {
     vertices: glium::vertex::VertexBufferAny,
-}
-
-/// Allows an `Axes` object to be passed as a source of vertices.
-impl<'a> glium::vertex::IntoVerticesSource<'a> for &'a Axes {
-    fn into_vertices_source(self) -> glium::vertex::VerticesSource<'a> {
-        return self.vertices.into_vertices_source();
-    }
 }
 
 /// Allows an `Axes` object to be passed as a source of indices.
@@ -139,7 +130,7 @@ impl AxesBuilder {
         where F: glium::backend::Facade
     {
         let vertices =
-            try!(glium::vertex::VertexBuffer::<Vertex>::new(display, &try!(self.build_vertices())));
+            glium::vertex::VertexBuffer::<Vertex>::new(display, &self.build_vertices()?)?;
 
         Ok(Axes { vertices: glium::vertex::VertexBufferAny::from(vertices) })
     }

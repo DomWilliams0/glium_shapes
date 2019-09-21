@@ -1,25 +1,15 @@
 //! A module for constructing sphere shapes.
 
-extern crate cgmath;
-extern crate glium;
+use cgmath::*;
+use crate::vertex::Vertex;
 
-use errors::ShapeCreationError;
-use self::cgmath::*;
-use std::f32;
-use vertex::Vertex;
+use crate::errors::ShapeCreationError;
 
 /// A polygonal `Sphere` object.
 ///
 /// This object is constructed using a `SphereBuilder` object.
 pub struct Sphere {
     vertices: glium::vertex::VertexBufferAny,
-}
-
-/// Allows a `Sphere` object to be passed as a source of vertices.
-impl<'a> glium::vertex::IntoVerticesSource<'a> for &'a Sphere {
-    fn into_vertices_source(self) -> glium::vertex::VerticesSource<'a> {
-        return self.vertices.into_vertices_source();
-    }
 }
 
 /// Allows a `Sphere` object to be passed as a source of indices.
@@ -155,7 +145,7 @@ impl SphereBuilder {
         where F: glium::backend::Facade
     {
         let vertices =
-            try!(glium::vertex::VertexBuffer::<Vertex>::new(display, &try!(self.build_vertices())));
+            glium::vertex::VertexBuffer::<Vertex>::new(display, &self.build_vertices()?)?;
 
         Ok(Sphere { vertices: glium::vertex::VertexBufferAny::from(vertices) })
     }
@@ -177,8 +167,8 @@ impl SphereBuilder {
         }
 
         // Build lookup tables.
-        let u_angle = 2.0 * f32::consts::PI / self.u_divisions as f32;
-        let v_angle = f32::consts::PI / self.v_divisions as f32;
+        let u_angle = 2.0 * std::f32::consts::PI / self.u_divisions as f32;
+        let v_angle = std::f32::consts::PI / self.v_divisions as f32;
 
         fn sin_cos(val: f32) -> [f32; 2] {
             [val.sin(), val.cos()]

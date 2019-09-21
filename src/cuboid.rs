@@ -1,24 +1,15 @@
 //! A module for constructing cuboid shapes.
 
-extern crate cgmath;
-extern crate glium;
-
-use errors::ShapeCreationError;
-use self::cgmath::*;
-use vertex::Vertex;
+use cgmath::*;
+use crate::vertex::Vertex;
+use glium::vertex::{VertexBufferAny};
+use crate::errors::ShapeCreationError;
 
 /// A polygonal `Cuboid` object.
 ///
 /// This object is constructed using a `CuboidBuilder` object.
 pub struct Cuboid {
-    vertices: glium::vertex::VertexBufferAny,
-}
-
-/// Allows a `Cuboid` object to be passed as a source of vertices.
-impl<'a> glium::vertex::IntoVerticesSource<'a> for &'a Cuboid {
-    fn into_vertices_source(self) -> glium::vertex::VerticesSource<'a> {
-        return self.vertices.into_vertices_source();
-    }
+    vertices: VertexBufferAny,
 }
 
 /// Allows a `Cuboid` object to be passed as a source of indices.
@@ -138,8 +129,8 @@ impl CuboidBuilder {
     pub fn build<F>(self, display: &F) -> Result<Cuboid, ShapeCreationError>
         where F: glium::backend::Facade
     {
-        let vertices = &try!(self.build_vertices());
-        let vbuffer = try!(glium::vertex::VertexBuffer::<Vertex>::new(display, vertices));
+        let vertices = &self.build_vertices()?;
+        let vbuffer = glium::vertex::VertexBuffer::<Vertex>::new(display, vertices)?;
         Ok(Cuboid { vertices: glium::vertex::VertexBufferAny::from(vbuffer) })
     }
 

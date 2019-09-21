@@ -1,12 +1,10 @@
 //! A module for common example logic, in an attempt to keep the example
 //! source files as concise as possible.
-extern crate cgmath;
-extern crate glium;
 
-use self::cgmath::*;
-use self::glium::*;
-use self::glium::uniforms::*;
-use self::glium::backend::glutin_backend::GlutinFacade;
+use cgmath::*;
+use glium::*;
+use glium::uniforms::*;
+use glium::backend::glutin_backend::GlutinFacade;
 
 /// Shared data used in the examples.
 pub struct ExampleData<'a> {
@@ -25,7 +23,7 @@ pub type FrameUniforms<'a> = UniformsStorage<'a, [[f32; 4]; 4], EmptyUniforms>;
 pub fn setup<'a>() -> (GlutinFacade, ExampleData<'a>) {
 
     let display = glium::glutin::WindowBuilder::new()
-        .with_dimensions(600, 600)
+        .with_dimensions((600, 600))
         .with_depth_buffer(16)
         .with_title("Example Viewer")
         .build_glium()

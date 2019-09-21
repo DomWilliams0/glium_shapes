@@ -1,6 +1,6 @@
 //! A module containing the vertex structure shared across all shapes.
 
-extern crate glium;
+use glium::implement_vertex;
 
 /// The vertex structure shared across all shapes.
 #[derive(Copy,Clone,Debug)]

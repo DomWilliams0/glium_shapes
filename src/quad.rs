@@ -1,11 +1,9 @@
 //! A module for constructing polygonal quad shapes.
 
-extern crate cgmath;
-extern crate glium;
+use cgmath::*;
+use crate::vertex::Vertex;
 
-use errors::ShapeCreationError;
-use self::cgmath::*;
-use vertex::Vertex;
+use crate::errors::ShapeCreationError;
 
 /// A polygonal quad.
 ///
@@ -15,11 +13,11 @@ pub struct Quad {
 }
 
 /// Allows a `Quad` object to be passed as a source of vertices.
-impl<'a> glium::vertex::IntoVerticesSource<'a> for &'a Quad {
-    fn into_vertices_source(self) -> glium::vertex::VerticesSource<'a> {
-        return self.vertices.into_vertices_source();
-    }
-}
+//impl<'a> Into<VerticesSource<'a>> for &'a Quad {
+//    fn into(self) -> glium::vertex::VerticesSource<'a> {
+//        return self.vertices.into();
+//    }
+//}
 
 /// Allows a `Quad` object to be passed as a source of indices.
 impl<'a> Into<glium::index::IndicesSource<'a>> for &'a Quad {
@@ -142,7 +140,7 @@ impl QuadBuilder {
         where F: glium::backend::Facade
     {
         let vertices =
-            try!(glium::vertex::VertexBuffer::<Vertex>::new(display, &try!(self.build_vertices())));
+            glium::vertex::VertexBuffer::<Vertex>::new(display, &self.build_vertices()?)?;
 
         Ok(Quad { vertices: glium::vertex::VertexBufferAny::from(vertices) })
     }
