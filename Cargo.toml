@@ -14,3 +14,8 @@ edition = "2018"
 approx = "~0.1.1"
 cgmath = "~0.17"
 glium = "~0.25"
+
+[features]
+default = []
+glutin = ["glium/glutin"]
+
